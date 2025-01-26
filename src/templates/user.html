@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{my_username}} Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #141447;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+            text-align: center;
+        }
+        .profile-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #0909b0;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        .profile-details {
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            line-height: 2;
+        }
+        .profile-details strong {
+            color: #ffd700;
+            font-size: 1.6rem;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 1.6rem;
+            color: white;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 8px;
+            
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    {% include "buttons.html" %}
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        <div class="profile-details">
+            <p><strong>Username:</strong> {{ user }}</p>
+            <p><strong>Email:</strong> {{ user}}</p>
+            <p><strong>Member Since:</strong> {{ user }}</p>
+        </div>
+        <div class="buttons">
+            <a href="/add_listing" class="btn">Add Listing</a>
+            <a href="/my_listings" class="btn">View My Listings</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -29,7 +29,8 @@ def home():
 
 @app.route('/catalog')
 def catalog():
-    return render_template('catalog.html', cars=cars)
+    username = session.get('username')
+    return render_template('catalog.html', cars=cars, my_username=username)
 
 @app.route("/login")
 def login(message=None):
@@ -57,9 +58,9 @@ def logout():
 
 @app.route("/profile/<username>")
 def user_page(username):
-    username = session.get('username')
-    if username:
-        return render_template('user.html', title='User', user=username)
+    session_username = session.get('username')
+    if session_username and username==session_username:
+        return render_template('user.html', title='User', my_username=session_username, user="Ime brat")
     else:
         return redirect(url_for('login', message='Log in your profile!'))
 
