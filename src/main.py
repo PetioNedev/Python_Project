@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_CONFIG')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cars.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 car1 = ["Toyota", "Corolla",15000.0, "Reliable family car."]
@@ -57,14 +55,14 @@ def logout():
     session.clear()  
     return redirect(url_for('home')) 
 
-@app.route("/profile/<name>")
-def user_page(name):
-    username = session.get('username')  # Проверка за наличен потребител
+@app.route("/profile/<username>")
+def user_page(username):
+    username = session.get('username')
     if username:
-        return render_template('user.html', title='User', user=name)
+        return render_template('user.html', title='User', user=username)
     else:
         return redirect(url_for('login', message='Log in your profile!'))
-    
+
 @app.route("/register")
 def register(message=None):
     if 'message' in request.args:
@@ -76,6 +74,10 @@ def register(message=None):
 def register_action():
     if request.method != 'POST':
         return redirect(url_for('/register', message='Invalid method'))
+    
+    username = request.form['username']
+    session['username'] = username
+    return redirect(url_for('home', name=username))
 ##################################################################################################
     # if request.form['username'] == 'admin' and request.form['password'] == 'admin':
     #     username = request.form['username']
