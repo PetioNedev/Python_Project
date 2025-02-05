@@ -136,6 +136,7 @@ def add_listing_action():
     new_category = request.form["category"]
     new_price = request.form["price"]
     new_description = request.form["description"]
+    new_mileage = request.form["mileage"]
     session_username = session.get("username")
     user = User.query.filter_by(username=session_username).first()
     new_car = Car(
@@ -145,6 +146,7 @@ def add_listing_action():
         category=new_category,
         price=new_price,
         description=new_description,
+        mileage=new_mileage,
     )
     db.session.add(new_car)
     db.session.commit()

@@ -14,6 +14,7 @@ class Car(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     likes = db.Column(db.Integer, default=0)
+    mileage = db.Column(db.Integer, nullable=False)
     brand = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50), nullable=False)

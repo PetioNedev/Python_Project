@@ -56,6 +56,7 @@
         {% for car in cars %}
         <div class="car">
             <h2>{{ car.brand}} {{ car.model }} {{ car.category }}</h2>
+            <h3>{{ car.mileage }}</h3>
             <p><strong>Price:</strong> {{ car.price }} USD</p>
             <p>{{ car.description }}</p>
         </div>
