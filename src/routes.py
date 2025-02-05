@@ -106,8 +106,9 @@ def register_action():
 @app.route("/catalog")
 def catalog(user=None):
     username = session.get("username")
-    if user is not None:
-        user_db_info = User.query.filter_by(username="petko").first()
+    if "user" in request.args and username == request.args["user"]:
+        user = request.args["user"]
+        user_db_info = User.query.filter_by(username=user).first()
         cars = user_db_info.cars
     else:
         cars = Car.query.all()
@@ -115,10 +116,10 @@ def catalog(user=None):
     return render_template("catalog.html", cars=cars, my_username=username)
 
 
-@app.route("/add_listing/<username>")
-def add_listing(username):
+@app.route("/add_listing/<my_username>")
+def add_listing(my_username):
     session_username = session.get("username")
-    if session_username and username == session_username:
+    if session_username and my_username == session_username:
         return render_template(
             "add_listing.html", title="User", my_username=session_username
         )
@@ -148,3 +149,12 @@ def add_listing_action():
     db.session.add(new_car)
     db.session.commit()
     return redirect(url_for("catalog", user=session_username))
+
+
+@app.route("/my_listings/<my_username>")
+def my_listings(my_username):
+    session_username = session.get("username")
+    if session_username and my_username == session_username:
+        return redirect(url_for("catalog", user=session_username))
+    else:
+        return redirect(url_for("login", message="Log in your profile!"))
