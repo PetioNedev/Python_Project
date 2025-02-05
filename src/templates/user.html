@@ -64,13 +64,12 @@
     <div class="profile-container">
         <h1>User Profile</h1>
         <div class="profile-details">
-            <p><strong>Username:</strong> {{ user }}</p>
-            <p><strong>Email:</strong> {{ user}}</p>
-            <p><strong>Member Since:</strong> {{ user }}</p>
+            <p><strong>Username:</strong> {{ user.username }}</p> 
+            <p><strong>Email:</strong> {{ user.email}}</p> 
         </div>
         <div class="buttons">
-            <a href="/add_listing" class="btn">Add Listing</a>
-            <a href="/my_listings" class="btn">View My Listings</a>
+            <a href="/add_listing/{{my_username}}" class="btn">Add Listing</a>
+            <a href="/my_listings/{{my_username}}" class="btn">View My Listings</a>
         </div>
     </div>
 </body>

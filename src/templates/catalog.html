@@ -55,9 +55,9 @@
     <div class="catalog">
         {% for car in cars %}
         <div class="car">
-            <h2>{{ car[0]}} {{ car[1] }}</h2>
-            <p><strong>Price:</strong> {{ car[2] }} USD</p>
-            <p>{{ car[3] }}</p>
+            <h2>{{ car.brand}} {{ car.model }} {{ car.category }}</h2>
+            <p><strong>Price:</strong> {{ car.price }} USD</p>
+            <p>{{ car.description }}</p>
         </div>
         {% endfor %}
     </div>
