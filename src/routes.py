@@ -196,3 +196,13 @@ def my_listings(my_username):
         return redirect(url_for("catalog", user=session_username))
     else:
         return redirect(url_for("login", message="Log in your profile!"))
+
+
+@app.route("/car/<car_id>")
+def car(car_id):
+    images = get_single_car_images(car_id)
+    this_car = Car.query.get_or_404(car_id)
+
+    return render_template(
+        "listing.html", images=images, my_username=session.get("username"), car=this_car
+    )

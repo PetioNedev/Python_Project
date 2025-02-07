@@ -1,40 +1,60 @@
-        <style>
-            .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 1.5rem;
-            color: white;
-            background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            }
+<style>
+    .btn {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        color: white;
+        background-color: #007bff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
 
-            .btn-secondary, .btn-register {
-            position: absolute; /* Абсолютно позициониране */
-            top: 10px;          /* Разстояние от горния ръб */
-            }
-    
-            .btn-secondary {
-                background-color: #141447;
-                right: 150px; /* Разстояние от десния ръб (за да има място за регистрация) */
-            }
-    
-            .btn-secondary:hover {
-                background-color: #2323c2;
-            }
-    
-            .btn-register {
-                background-color: #141447;
-                right: 10px; /* Позиционирането директно до десния ръб */
-            }
-    
-            .btn-register:hover {
-                background-color: #2323c2;
-            }
-            
-        </style>
+    .btn-secondary, .btn-register, .btn-home {
+        position: absolute;
+        top: 10px;
+    }
+
+    .btn-home {
+        left: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-home img {
+        width: 100px;
+        height: auto;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .btn-home img:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-secondary {
+        background-color: #141447;
+        right: 150px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #2323c2;
+    }
+
+    .btn-register {
+        background-color: #141447;
+        right: 10px; 
+    }
+
+    .btn-register:hover {
+        background-color: #2323c2;
+    }
+</style>
+
+        <a href="/" class="btn-home">
+            <img src="{{ url_for('static', filename='home.png') }}" alt="Home">
+        </a>        
 
         {% if my_username %}
         <a href="/profile/{{my_username}}" class="btn btn-secondary">{{my_username}}</a>

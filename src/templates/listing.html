@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ car.brand }} {{ car.model }} - Listing</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #141447;
+            margin: 0;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 50px;
+        }
+        .listing-container {
+            background: #0909b0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 20px; 
+        }
+        .content-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 30px;
+        }
+        .info-section {
+            flex: 1;
+            text-align: left;
+            font-size: 1.2rem;
+        }
+        .info-section h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .info-section p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        .small-text {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        .gallery {
+            flex: 1.5;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 48%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+        }
+        .gallery img:hover {
+            transform: scale(2); 
+        }
+    </style>
+</head>
+<body>
+    {% include "buttons.html" %}
+
+    <div class="listing-container">
+        <div class="content-container">
+            <div class="info-section">
+                <h2>{{ car.brand }} {{ car.model }}</h2>
+                <p><strong>Owner ID:</strong> {{ car.user_id }}</p>
+                <p><strong>Year:</strong> {{ car.year }}</p>
+                <p><strong>Category:</strong> {{ car.category }}</p>
+                <p><strong>Price:</strong> {{ car.price }} USD</p>
+                <p><strong>Mileage:</strong> {{ car.mileage }} km</p>
+                <p><strong>Description:</strong> {{ car.description }}</p>
+                <p class="small-text"><strong>Created at:</strong> {{ car.created_at }}</p>
+            </div>
+
+            <div class="gallery">
+                {% if images %}
+                    {% for img in images %}
+                        <img src="{{ url_for('static', filename='cars_img/' + img) }}" alt="Car Image">
+                    {% endfor %}
+                {% else %}
+                    <img src="{{ url_for('static', filename='404_car_shop.webp') }}" alt="No Image Available">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
