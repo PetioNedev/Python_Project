@@ -11,6 +11,9 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from models import Car, User
 from main import app, db
+from json_file_logic import upload_images_json
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 
 @app.errorhandler(404)
@@ -127,6 +130,10 @@ def add_listing(my_username):
         return redirect(url_for("login", message="Log in your profile!"))
 
 
+def allowed_file(filename):
+    return "." in filename and filename.split(".")[-1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route("/add_listing_action", methods=["POST"])
 def add_listing_action():
     if request.method != "POST":
@@ -150,6 +157,31 @@ def add_listing_action():
     )
     db.session.add(new_car)
     db.session.commit()
+
+    car_id = new_car.id
+
+    if "images" not in request.files:
+        app.flash("Provide images for your car brother!")
+
+    imgs = request.files.getlist("images")
+    uploaded_filenames = []
+
+    if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+        os.makedirs(app.config["UPLOAD_FOLDER"])
+
+    for index, img in enumerate(imgs):
+        if img.filename == "":
+            continue
+
+        if img and allowed_file(img.filename):
+            file_extension = img.filename.split(".")[-1].lower()
+            file_name = f"{car_id}_{index}_car.{file_extension}"
+            file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
+            img.save(file_path)
+            uploaded_filenames.append(file_name)
+
+    upload_images_json(car_id, uploaded_filenames)
+
     return redirect(url_for("catalog", user=session_username))
 
 
