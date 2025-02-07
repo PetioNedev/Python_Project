@@ -82,6 +82,13 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4" required></textarea>
 
+            <label for="year">Produced in:</label>
+            <select id="year" name="year" required>
+                {% for year in range(2024, 1949, -1) %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+
             <label for="category">Category:</label>
             <select id="category" name="category">
                 <option value="sedan">Sedan</option>

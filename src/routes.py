@@ -11,7 +11,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from models import Car, User
 from main import app, db
-from json_file_logic import upload_images_json
+from json_file_logic import upload_images_json, get_single_car_images
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
@@ -116,7 +116,9 @@ def catalog(user=None):
     else:
         cars = Car.query.all()
 
-    return render_template("catalog.html", cars=cars, my_username=username)
+    return render_template(
+        "catalog.html", cars=cars, my_username=username, get_img=get_single_car_images
+    )
 
 
 @app.route("/add_listing/<my_username>")
@@ -144,6 +146,7 @@ def add_listing_action():
     new_price = request.form["price"]
     new_description = request.form["description"]
     new_mileage = request.form["mileage"]
+    new_year = int(request.form["year"])
     session_username = session.get("username")
     user = User.query.filter_by(username=session_username).first()
     new_car = Car(
@@ -154,6 +157,7 @@ def add_listing_action():
         price=new_price,
         description=new_description,
         mileage=new_mileage,
+        year=new_year,
     )
     db.session.add(new_car)
     db.session.commit()

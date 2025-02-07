@@ -1,5 +1,7 @@
 from utils import db
 from datetime import datetime, timezone
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
 
 
 class User(db.Model):
@@ -21,3 +23,10 @@ class Car(db.Model):
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    year = db.Column(db.Integer, nullable=False)
+
+    @validates("year")
+    def validate_year(self, key, value):
+        if value < 1950 or value > 2024:
+            raise ValueError("Year must be between 1950 and 2024")
+        return value

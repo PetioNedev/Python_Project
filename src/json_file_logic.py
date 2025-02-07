@@ -59,3 +59,12 @@ def delete_car_json(car_id):
 
     save_images(all_images)
     print("Car deleted successfully")
+
+
+def get_single_car_images(car_id):
+    all_images = load_images()
+
+    if str(car_id) in all_images:
+        return all_images[str(car_id)]
+
+    return []
