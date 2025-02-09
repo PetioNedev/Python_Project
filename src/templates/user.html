@@ -71,6 +71,11 @@
             <a href="/add_listing/{{my_username}}" class="btn">Add Listing</a>
             <a href="/my_listings/{{my_username}}" class="btn">View My Listings</a>
         </div>
+        {% if session.get("username") %}
+            <form action="/delete_user_action/{{session.get('username')}}" method="POST" onsubmit="return confirm('Are you sure you want to delete your profile?');">
+                <button type="submit" class="btn">Delete</button>
+            </form>
+        {% endif %}
     </div>
 </body>
 </html>

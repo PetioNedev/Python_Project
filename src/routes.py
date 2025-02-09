@@ -65,7 +65,7 @@ def logout():
 def user_page(username):
     session_username = session.get("username")
     if session_username and username == session_username:
-        user = User.query.filter_by(username=session_username).first()
+        user = User.query.filter_by(username=session_username).first_or_404()
         return render_template(
             "user.html", title="User", my_username=session_username, user=user
         )
@@ -111,7 +111,7 @@ def catalog(user=None):
     username = session.get("username")
     if "user" in request.args and username == request.args["user"]:
         user = request.args["user"]
-        user_db_info = User.query.filter_by(username=user).first()
+        user_db_info = User.query.filter_by(username=user).first_or_404()
         cars = user_db_info.cars
     else:
         cars = Car.query.all()
@@ -148,7 +148,7 @@ def add_listing_action():
     new_mileage = request.form["mileage"]
     new_year = int(request.form["year"])
     session_username = session.get("username")
-    user = User.query.filter_by(username=session_username).first()
+    user = User.query.filter_by(username=session_username).first_or_404()
     new_car = Car(
         user_id=user.id,
         brand=new_brand,
@@ -217,3 +217,21 @@ def delete(car_id):
     db.session.commit()
 
     return redirect(url_for("catalog"))
+
+
+@app.route("/delete_user_action/<user_name>", methods=["POST"])
+def delete_user(user_name):
+    session_username = session.get("username")
+    if not (session_username and user_name == session_username):
+        return redirect(url_for("login", message="Log in your profile!"))
+
+    user_to_delete = User.query.filter_by(username=user_name).first_or_404()
+    car_ids = [car.id for car in user_to_delete.cars]
+    for car_id in car_ids:
+        delete_car_json(car_id)
+
+    db.session.delete(user_to_delete)
+    db.session.commit()
+
+    session.clear()
+    return redirect(url_for("home"))
