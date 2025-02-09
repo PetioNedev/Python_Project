@@ -23,8 +23,8 @@ from routes import *
 
 def create_database():
     with app.app_context():
-        db.create_all()  # Това ще създаде само липсващи таблици
-        print("📦 Database checked/created!")
+        db.create_all()
+        print("Database checked/created!")
 
 
 if __name__ == "__main__":

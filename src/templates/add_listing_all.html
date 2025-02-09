@@ -66,36 +66,38 @@
     {% include "buttons.html" %}
     <div class="form-container">
         <h1>Add Listing</h1>
-        <form action="/add_listing_brand_model/{{my_username}}" method="POST" enctype="multipart/form-data">
-            <label for="brand">Brand:</label>
-            <select id="brand" name="brand" required">
-                {% for brand in brands %}
-                    <option value="{{ brand }}">{{ brand }}</option>
-                {% endfor %}
-            </select>
+        <form action="/add_listing_action" method="POST" enctype="multipart/form-data">
+            <label for="brand">Brand: {{ brand }}</label>
+            <input id="brand" name="brand" value="{{ brand }}" readonly>
+
+
             
 
             <label for="model">Model:</label>
-            <input type="text" id="model" name="model" disabled>
+            <select id="model" name="model" required>
+                {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                {% endfor %}
+            </select>
 
             <label for="price">Price (Samo Evraci):</label>
-            <input type="number" id="price" name="price" disabled>
+            <input type="number" id="price" name="price" required>
 
             <label for="mileage">Mileage (km):</label>
-            <input type="number" id="mileage" name="mileage" disabled>
+            <input type="number" id="mileage" name="mileage" required>
 
             <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" disabled></textarea>
+            <textarea id="description" name="description" rows="4" required></textarea>
 
             <label for="year">Produced in:</label>
-            <select id="year" name="year" disabled>
+            <select id="year" name="year" required>
                 {% for year in range(2024, 1949, -1) %}
                     <option value="{{ year }}">{{ year }}</option>
                 {% endfor %}
             </select>
 
             <label for="category">Category:</label>
-            <select id="category" name="category" disabled>
+            <select id="category" name="category" required>
                 <option value="sedan">Sedan</option>
                 <option value="suv">SUV</option>
                 <option value="truck">Truck</option>
@@ -104,7 +106,7 @@
             </select>
 
             <label for="images">Upload Images:</label>
-            <input type="file" id="images" name="images" accept="image/*" multiple disabled>
+            <input type="file" id="images" name="images" accept="image/*" multiple required>
 
             <button type="submit" class="btn">Submit Listing</button>
         </form>

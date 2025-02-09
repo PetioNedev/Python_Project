@@ -29,6 +29,33 @@ CAR_INFO = [
     "Manufacturer Name",
 ]
 
+CAR_BRANDS = [
+    "Alfa Romeo",
+    "Aston Martin",
+    "Audi",
+    "Bentley",
+    "BMW",
+    "Bugatti",
+    "Citroen",
+    "Dacia",
+    "Ferrari",
+    "Fiat",
+    "Ford",
+    "Honda",
+    "Hyundai",
+    "Kia",
+    "Lamborghini",
+    "Lexus",
+    "Mazda",
+    "Mercedes-Benz",
+    "Nissan",
+    "Opel",
+    "Subaru",
+    "Suzuki",
+    "Volkswagen",
+    "Volvo",
+]
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -135,12 +162,52 @@ def catalog(user=None):
     )
 
 
+# @app.route("/add_listing_all/<my_username>")
+# def add_listing_all(my_username):
+#     session_username = session.get("username")
+#     if session_username and my_username == session_username:
+#         return render_template(
+#             "add_listing_all.html",
+#             title="User",
+#             my_username=session_username,
+#             brands=CAR_BRANDS,
+#         )
+#     else:
+#         return redirect(url_for("login", message="Log in your profile!"))
+
+
+@app.route("/add_listing_brand_model/<my_username>", methods=["POST"])
+def add_listing_brand_model(my_username):
+    picked_brand = request.form["brand"]
+
+    url = f"https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/{picked_brand}?format=json"
+    response = requests.get(url)
+    data = response.json()
+
+    if "Results" in data and data["Results"]:
+        models = [model["Model_Name"] for model in data["Results"]]
+
+    session_username = session.get("username")
+    if session_username and my_username == session_username:
+        return render_template(
+            "add_listing_all.html",
+            brand=picked_brand,
+            models=models,
+            my_username=session_username,
+        )
+    else:
+        return redirect(url_for("login", message="Log in your profile!"))
+
+
 @app.route("/add_listing/<my_username>")
 def add_listing(my_username):
     session_username = session.get("username")
     if session_username and my_username == session_username:
         return render_template(
-            "add_listing.html", title="User", my_username=session_username
+            "add_listing.html",
+            title="User",
+            my_username=session_username,
+            brands=CAR_BRANDS,
         )
     else:
         return redirect(url_for("login", message="Log in your profile!"))
@@ -267,7 +334,12 @@ def vin():
             if entry["Value"] and entry["Variable"] in CAR_INFO
         }
 
-    return render_template("vin_lookup.html", car_info=car_info, vin=vin)
+    return render_template(
+        "vin_lookup.html",
+        car_info=car_info,
+        vin=vin,
+        my_username=session.get("username"),
+    )
 
 
 # https://vingenerator.org/
