@@ -11,7 +11,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from models import Car, User
 from main import app, db
-from json_file_logic import upload_images_json, get_single_car_images
+from json_file_logic import upload_images_json, get_single_car_images, delete_car_json
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
@@ -206,3 +206,14 @@ def car(car_id):
     return render_template(
         "listing.html", images=images, my_username=session.get("username"), car=this_car
     )
+
+
+@app.route("/delete_action/<car_id>", methods=["POST"])
+def delete(car_id):
+    delete_car_json(car_id)
+
+    car = Car.query.get_or_404(car_id)
+    db.session.delete(car)
+    db.session.commit()
+
+    return redirect(url_for("catalog"))

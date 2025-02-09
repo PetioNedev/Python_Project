@@ -57,9 +57,9 @@
         </a>        
 
         {% if my_username %}
-        <a href="/profile/{{my_username}}" class="btn btn-secondary">{{my_username}}</a>
-        <a href="/logout" class="btn btn-register">Log out</a>
+            <a href="/profile/{{my_username}}" class="btn btn-secondary">{{my_username}}</a>
+            <a href="/logout" class="btn btn-register">Log out</a>
         {% else %}
-        <a href="/login" class="btn btn-secondary">Login</a>
-        <a href="/register" class="btn btn-register">Register</a>
+            <a href="/login" class="btn btn-secondary">Login</a>
+            <a href="/register" class="btn btn-register">Register</a>
         {% endif %}
