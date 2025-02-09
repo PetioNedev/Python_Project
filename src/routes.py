@@ -12,8 +12,22 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Car, User
 from main import app, db
 from json_file_logic import upload_images_json, get_single_car_images, delete_car_json
+import requests
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+CAR_INFO = [
+    "Model",
+    "Make",
+    "Model",
+    "Vehicle Type",
+    "Body Class",
+    "Doors",
+    "Transmission Speeds",
+    "Transmission Style",
+    "Engine Number of Cylinders",
+    "Fuel Type - Primary",
+    "Manufacturer Name",
+]
 
 
 @app.errorhandler(404)
@@ -235,3 +249,25 @@ def delete_user(user_name):
 
     session.clear()
     return redirect(url_for("home"))
+
+
+@app.route("/vin_lookup", methods=["GET", "POST"])
+def vin():
+    car_info = dict()
+    vin = None
+    if request.method == "POST":
+        vin = request.form.get("vin")
+
+        url = f"https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/{vin}?format=json"
+        response = requests.get(url)
+        data = response.json()
+        car_info = {
+            entry["Variable"]: entry["Value"]
+            for entry in data["Results"]
+            if entry["Value"] and entry["Variable"] in CAR_INFO
+        }
+
+    return render_template("vin_lookup.html", car_info=car_info, vin=vin)
+
+
+# https://vingenerator.org/
