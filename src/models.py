@@ -1,3 +1,5 @@
+"""Models module defining database structure for users and cars."""
+
 from utils import db
 from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
@@ -5,6 +7,8 @@ from sqlalchemy.orm import validates
 
 
 class User(db.Model):
+    """User model representing a registered user."""
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -13,6 +17,8 @@ class User(db.Model):
 
 
 class Car(db.Model):
+    """Car model representing a vehicle listing."""
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     mileage = db.Column(db.Integer, nullable=False)
@@ -25,7 +31,8 @@ class Car(db.Model):
     year = db.Column(db.Integer, nullable=False)
 
     @validates("year")
-    def validate_year(self, key, value):
+    def validate_year(self, value: int) -> int:
+        """Validate that the car year is between 1950 and 2024."""
         if value < 1950 or value > 2024:
             raise ValueError("Year must be between 1950 and 2024")
         return value

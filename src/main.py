@@ -21,7 +21,8 @@ from models import User, Car
 from routes import *
 
 
-def create_database():
+def create_database() -> None:
+    """Create the database tables if they do not already exist."""
     with app.app_context():
         db.create_all()
         print("Database checked/created!")

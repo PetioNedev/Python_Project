@@ -10,9 +10,11 @@ from flask import (
 import os
 from flask_sqlalchemy import SQLAlchemy
 from models import Car, User
-from main import app, db
+from main import app
+from utils import db
 from json_file_logic import upload_images_json, get_single_car_images, delete_car_json
 import requests
+from typing import Dict, List, Optional, Union, Response
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 CAR_INFO = [
@@ -58,12 +60,14 @@ CAR_BRANDS = [
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(e) -> make_response:
+    """Handle 404 errors with a custom page."""
     return make_response(render_template("custom_404.html"), 404)
 
 
 @app.route("/")
-def home():
+def home() -> str:
+    """Render the homepage with the username if logged in."""
     username = session.get("username")  # Проверка за наличен потребител
     if username:
         return render_template("home.html", title="Home", my_username=username)
@@ -72,7 +76,8 @@ def home():
 
 
 @app.route("/login")
-def login(message=None):
+def login(message: Optional[str] = None) -> str:
+    """Render the login page."""
     if "message" in request.args:
         message = request.args["message"]
     print(message)
@@ -97,13 +102,15 @@ def login_action():
 
 
 @app.route("/logout")
-def logout():
+def logout() -> redirect:
+    """Clear session and redirect to home."""
     session.clear()
     return redirect(url_for("home"))
 
 
 @app.route("/profile/<username>")
-def user_page(username):
+def user_page(username: str) -> Union[str, Response]:
+    """Render the user profile page if logged in, otherwise redirect to login."""
     session_username = session.get("username")
     if session_username and username == session_username:
         user = User.query.filter_by(username=session_username).first_or_404()
@@ -199,7 +206,8 @@ def add_listing(my_username):
         return redirect(url_for("login", message="Log in your profile!"))
 
 
-def allowed_file(filename):
+def allowed_file(filename: str) -> bool:
+    """Check if the uploaded file is allowed."""
     return "." in filename and filename.split(".")[-1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -266,7 +274,8 @@ def my_listings(my_username):
 
 
 @app.route("/car/<car_id>")
-def car(car_id):
+def car(car_id: int) -> str:
+    """Render a specific car listing page."""
     images = get_single_car_images(car_id)
     this_car = Car.query.get_or_404(car_id)
 
@@ -276,7 +285,8 @@ def car(car_id):
 
 
 @app.route("/delete_action/<car_id>", methods=["POST"])
-def delete(car_id):
+def delete(car_id: int) -> redirect:
+    """Delete a car listing and redirect to the catalog."""
     delete_car_json(car_id)
 
     car = Car.query.get_or_404(car_id)
@@ -287,7 +297,8 @@ def delete(car_id):
 
 
 @app.route("/delete_user_action/<user_name>", methods=["POST"])
-def delete_user(user_name):
+def delete_user(user_name: str) -> redirect:
+    """Delete a user and all their associated car listings."""
     session_username = session.get("username")
     if not (session_username and user_name == session_username):
         return redirect(url_for("login", message="Log in your profile!"))
