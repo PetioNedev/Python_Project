@@ -14,7 +14,8 @@ from main import app
 from utils import db
 from json_file_logic import upload_images_json, get_single_car_images, delete_car_json
 import requests
-from typing import Dict, List, Optional, Union, Response
+from typing import Dict, List, Optional, Union
+from flask import Response
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 CAR_INFO = [

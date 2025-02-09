@@ -31,7 +31,7 @@ class Car(db.Model):
     year = db.Column(db.Integer, nullable=False)
 
     @validates("year")
-    def validate_year(self, value: int) -> int:
+    def validate_year(self, key, value: int) -> int:
         """Validate that the car year is between 1950 and 2024."""
         if value < 1950 or value > 2024:
             raise ValueError("Year must be between 1950 and 2024")
