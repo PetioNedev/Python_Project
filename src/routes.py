@@ -162,20 +162,6 @@ def catalog(user=None):
     )
 
 
-# @app.route("/add_listing_all/<my_username>")
-# def add_listing_all(my_username):
-#     session_username = session.get("username")
-#     if session_username and my_username == session_username:
-#         return render_template(
-#             "add_listing_all.html",
-#             title="User",
-#             my_username=session_username,
-#             brands=CAR_BRANDS,
-#         )
-#     else:
-#         return redirect(url_for("login", message="Log in your profile!"))
-
-
 @app.route("/add_listing_brand_model/<my_username>", methods=["POST"])
 def add_listing_brand_model(my_username):
     picked_brand = request.form["brand"]
